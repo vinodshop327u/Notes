@@ -1,5 +1,262 @@
-WebSecurityConfig
-This class extends the WebSecurityConfigurerAdapter is a convenience class that allows customization to both WebSecurity and HttpSecurity.
+Spring Boot Security Example - Refresh Expired JSON Web Token
+
+In previous tutorial we had implemented Spring Boot + JWT Example. We had also covered the topic of JWT Expiration. We had implemented the solution such that if the JWT has expired then the user gets JWTExpiredException.
+Suppose our requirement is such that if the token has expired, still the user should be allowed to access the system if the token is valid. That is the token should be refreshed or a new valid token should be provided.
+We will be working on a solution where if the user he receives JWT expired exception, then he can call another API with the expired token. A new token will then provided to the user which he can use for future interactions. Previously we had implemented an example for programmatically consuming the JWT secure API using Spring RestTemplate. We will be testing this refresh Token generation API both using Postman as well as the Spring RestTemplate.
+
+Create and return new JWT token on Expiration
+We will be modifying the Spring Boot + JWT + MySql example to implement Refresh JWT.
+
+diagram
+
+In application properties specify expiration time for the refresh token to be created. We use a seperate value for Refresh Token as we may want to specify different value to refresh token that the original JWT.
+Also the expirationDateInMs we have specified as 0 because we want to test the expiration scenario.
+
+application.properties
+
+jwt.secret = javainuse
+jwt.expirationDateInMs=0
+jwt.refreshExpirationDateInMs=9000000
+spring.datasource.url=jdbc:mysql://localhost/bootjwt?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false
+spring.datasource.username=root
+spring.datasource.password=root
+spring.jpa.hibernate.ddl-auto=create-drop
+
+In the JwtUtil class create a method named doGenerateRefreshToken to create the refresh token.
+
+@Service
+public class JwtUtil {
+
+	private String secret;
+	private int jwtExpirationInMs;
+	private int refreshExpirationDateInMs;
+
+	@Value("${jwt.secret}")
+	public void setSecret(String secret) {	this.secret = secret;	}
+
+	@Value("${jwt.expirationDateInMs}")
+	public void setJwtExpirationInMs(int jwtExpirationInMs) {
+		this.jwtExpirationInMs = jwtExpirationInMs;		}
+
+	@Value("${jwt.refreshExpirationDateInMs}")
+	public void setRefreshExpirationDateInMs(int refreshExpirationDateInMs) {
+		this.refreshExpirationDateInMs = refreshExpirationDateInMs;		}
+
+	public String generateToken(UserDetails userDetails) {
+		Map<String, Object> claims = new HashMap<>();
+		Collection<? extends GrantedAuthority> roles = userDetails.getAuthorities();
+
+		if (roles.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+			claims.put("isAdmin", true);			}
+		if (roles.contains(new SimpleGrantedAuthority("ROLE_USER"))) {
+			claims.put("isUser", true);			}
+
+		return doGenerateToken(claims, userDetails.getUsername());		}
+
+	private String doGenerateToken(Map<String, Object> claims, String subject) {
+		return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+				.setExpiration(new Date(System.currentTimeMillis() + jwtExpirationInMs))
+				.signWith(SignatureAlgorithm.HS512, secret).compact();		}
+
+	public String doGenerateRefreshToken(Map<String, Object> claims, String subject) {
+		return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+				.setExpiration(new Date(System.currentTimeMillis() + refreshExpirationDateInMs))
+				.signWith(SignatureAlgorithm.HS512, secret).compact();		}
+
+	public boolean validateToken(String authToken) {
+		try {
+			Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(authToken);
+			return true;
+		} catch (SignatureException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException ex) {
+			throw new BadCredentialsException("INVALID_CREDENTIALS", ex);
+		} catch (ExpiredJwtException ex) {
+			throw ex;
+		}
+	}
+
+	public String getUsernameFromToken(String token) {
+		Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+		return claims.getSubject();
+
+	}
+
+	public List<SimpleGrantedAuthority> getRolesFromToken(String token) {
+		Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+
+		List<SimpleGrantedAuthority> roles = null;
+
+		Boolean isAdmin = claims.get("isAdmin", Boolean.class);
+		Boolean isUser = claims.get("isUser", Boolean.class);
+
+		if (isAdmin != null && isAdmin) {
+			roles = Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+		}
+
+		if (isUser != null && isAdmin) {
+			roles = Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+		}
+		return roles;
+
+	}
+
+Next we will be making changes in CustomJwtAuthenticationFilter class. If during JWT validation we get JWT Expiration Exception then we check -
+If the HttpRequest header has the isRefreshToken set to true
+If the HttpRequest url is refreshtoken. We do not want any other url to be allowed if the JWT has expired
+If both the above conditions are true then we extract the claims from the ExpiredJwtException and store them as an attribute in the HttpRequest. These claims will be later used for Refresh JWT creation. Also we set the Security context by creating a UsernamePasswordAuthenticationToken with null values.
+
+@Component
+public class CustomJwtAuthenticationFilter extends OncePerRequestFilter {
+
+	@Autowired
+	private JwtUtil jwtTokenUtil;
+
+	@Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+			throws ServletException, IOException {
+
+		try {
+			// JWT Token is in the form "Bearer token". Remove Bearer word and
+			// get only the Token
+			String jwtToken = extractJwtFromRequest(request);
+
+			if (StringUtils.hasText(jwtToken) && jwtTokenUtil.validateToken(jwtToken)) {
+				UserDetails userDetails = new User(jwtTokenUtil.getUsernameFromToken(jwtToken), "",
+						jwtTokenUtil.getRolesFromToken(jwtToken));
+
+				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+						userDetails, null, userDetails.getAuthorities());
+				// After setting the Authentication in the context, we specify
+				// that the current user is authenticated. So it passes the
+				// Spring Security Configurations successfully.
+				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+			} else {
+				System.out.println("Cannot set the Security Context");
+			}
+		} catch (ExpiredJwtException ex) {
+
+			String isRefreshToken = request.getHeader("isRefreshToken");
+			String requestURL = request.getRequestURL().toString();
+			// allow for Refresh Token creation if following conditions are true.
+			if (isRefreshToken != null && isRefreshToken.equals("true") && requestURL.contains("refreshtoken")) {
+				allowForRefreshToken(ex, request);
+			} else
+				request.setAttribute("exception", ex);
+
+		} catch (BadCredentialsException ex) {
+			request.setAttribute("exception", ex);
+		} catch (Exception ex) {
+			System.out.println(ex);
+		}
+		chain.doFilter(request, response);
+	}
+
+	private void allowForRefreshToken(ExpiredJwtException ex, HttpServletRequest request) {
+
+		// create a UsernamePasswordAuthenticationToken with null values.
+		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+				null, null, null);
+		// After setting the Authentication in the context, we specify
+		// that the current user is authenticated. So it passes the
+		// Spring Security Configurations successfully.
+		SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+		// Set the claims so that in controller we will be using it to create
+		// new JWT
+		request.setAttribute("claims", ex.getClaims());
+
+	}
+
+	private String extractJwtFromRequest(HttpServletRequest request) {
+		String bearerToken = request.getHeader("Authorization");
+		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+			return bearerToken.substring(7, bearerToken.length());
+		}
+		return null;
+	}
+
+}
+
+
+Finally in the controller class expose the GET API for creating the refresh token -
+
+@RestController
+public class AuthenticationController {
+
+	@Autowired
+	private AuthenticationManager authenticationManager;
+
+	@Autowired
+	private CustomUserDetailsService userDetailsService;
+
+	@Autowired
+	private JwtUtil jwtUtil;
+
+	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
+			throws Exception {
+		try {
+			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+					authenticationRequest.getUsername(), authenticationRequest.getPassword()));
+		} catch (DisabledException e) {
+			throw new Exception("USER_DISABLED", e);
+		} catch (BadCredentialsException e) {
+			throw new Exception("INVALID_CREDENTIALS", e);
+		}
+
+		UserDetails userdetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+		String token = jwtUtil.generateToken(userdetails);
+		return ResponseEntity.ok(new AuthenticationResponse(token));
+	}
+
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
+	public ResponseEntity<?> saveUser(@RequestBody UserDTO user) throws Exception {
+		return ResponseEntity.ok(userDetailsService.save(user));
+	}
+
+	@RequestMapping(value = "/refreshtoken", method = RequestMethod.GET)
+	public ResponseEntity<?> refreshtoken(HttpServletRequest request) throws Exception {
+		// From the HttpRequest get the claims
+		DefaultClaims claims = (io.jsonwebtoken.impl.DefaultClaims) request.getAttribute("claims");
+
+		Map<String, Object> expectedMap = getMapFromIoJsonwebtokenClaims(claims);
+		String token = jwtUtil.doGenerateRefreshToken(expectedMap, expectedMap.get("sub").toString());
+		return ResponseEntity.ok(new AuthenticationResponse(token));
+	}
+
+	public Map<String, Object> getMapFromIoJsonwebtokenClaims(DefaultClaims claims) {
+		Map<String, Object> expectedMap = new HashMap<String, Object>();
+		for (Entry<String, Object> entry : claims.entrySet()) {
+			expectedMap.put(entry.getKey(), entry.getValue());
+		}
+		return expectedMap;
+	}
+}
+
+We are done with the changes.
+Register new User - localhost:8080/register
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
