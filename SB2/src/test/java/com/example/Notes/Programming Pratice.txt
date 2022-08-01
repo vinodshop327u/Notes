@@ -1,0 +1,408 @@
+1) Java Program to Read The Number From Standard Input?
+class GFG {
+    public static void main(String[] args)
+    {
+        // Declare the variables
+        int num;
+        // Input the integer
+        System.out.println("Enter the integer: ");
+        // Create Scanner object
+        Scanner s = new Scanner(System.in);
+        // Read the next integer from the screen
+        num = s.nextInt();
+        // Display the integer
+        System.out.println("Entered integer is: "+ num);
+    }
+}	
+Output:
+Enter the integer: 10
+Entered integer is: 10
+
+2) 
+ // Enter data using BufferReader
+	BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+	System.out.println("Enter the name:");
+	// Reading data using readLine
+	String name = reader.readLine();
+
+	// Printing the read line
+	System.out.println(name);	
+	
+-----
+// Using Scanner for Getting Input from User
+        Scanner in = new Scanner(System.in);
+        String s = in.nextLine();
+        System.out.println("You entered string " + s);
+        int a = in.nextInt();
+        System.out.println("You entered integer " + a);
+         float b = in.nextFloat();
+        System.out.println("You entered float " + b);
+------------
+3) Java Program to Swap Two Numbers		
+	 static void swapValuesUsingThirdVariable(int m, int n)
+	    {
+	        int temp = m;        m = n;	        n = temp;
+	        System.out.println("Value of m is " + m+ " and Value of n is " + n);
+	    }
+	 
+	    // Main driver code
+	    public static void main(String[] args)
+	    {
+	        // Random integer values
+	        int m = 9, n = 5;
+	         // Calling above function to reverse the numbers
+	        swapValuesUsingThirdVariable(m, n);
+	        swapValuesUsingThirdVariable(10, 20);
+	        swapValuesUsingThirdVariable(20, 30);
+	    }
+	
+Output:-
+Value of m is 5 and Value of n is 9
+Value of m is 20 and Value of n is 10
+Value of m is 30 and Value of n is 20
+------------
+static void swapValuesWithoutUsingThirdVariable(int m,int n)
+	{
+		// is stored in first variable
+		m = m - n;
+		// Sum is stored in second variable
+		n = m + n;
+		// Difference of 1st from 2nd is replaced in first variable
+		m = n - m;
+		// Print numbers
+		System.out.println("Value of m is " + m	+ " and Value of n is " + n);
+	}
+main method
+swapValuesUsingThirdVariable(m, n);
+swapValuesUsingThirdVariable(10, 20);
+swapValuesUsingThirdVariable(20, 30);
+Output:
+Value of m is 5 and Value of n is 9
+Value of m is 20 and Value of n is 10
+Value of m is 30 and Value of n is 20
+---------------
+static void swapValuesWithoutUsingThirdVariable(int m,int n)
+	{
+		 m = m ^ n;
+	     n = m ^ n;
+	     m = m ^ n;
+		System.out.println("Value of m is " + m	+ " and Value of n is " + n);
+	}
+Output:
+Value of m is 5 and Value of n is 9
+
+------
+
+4) 	Java Program to Check Even or Odd Integers
+public static boolean oddreven(int n)
+    {
+    	if(n % 2 == 0)
+    	{ 		System.out.println("even Number");   	}
+    	else
+    	{  		System.out.println("Odd Number");    	}
+    	return true;
+    }
+	oddreven(99);
+Output:- Odd Number
+---------------------------
+public static boolean oddreven1(int n)
+    {
+    	if((n | 1) > n)
+    	{		System.out.println("even Number");   	}
+    	else
+    	{  		System.out.println("Odd Number");   	}
+    	return true;
+    }
+oddreven1(100);
+Output:- even Number
+------------
+public static boolean oddreven1(int n)
+    {
+		if ((n & 1) == 1) {
+              // Print statement
+             System.out.println("Number is Odd");
+         }
+         else {
+  
+             // Print statement
+             System.out.println("Number is Even");
+         }
+	}
+oddreven1(99);
+Output:- Number is Odd
+
+----------------
+
+ if ((n & 1) == 1) {     System.out.println("Number is Odd");         }
+         else {           System.out.println("Number is Even");       }
+		 
+oddreven1(99);
+Output:- Number is Odd
+		 
+-------------------
+
+5)Java Program to Find the Largest of three Numbers
+
+int x=biggestOfThree(10, 20, 15);
+System.out.println("biggest number= "+x ); 
+static int biggestOfThree(int x, int y, int z)
+{
+
+	return z > (x > y ? x : y) ? z : ((x > y) ? x : y);
+}
+
+Output:-
+biggest number= 20
+-----------------------------
+if (x >= y && x >= z)	return x;
+else if (y >= x && y >= z)	return y;
+else	return z;
+
+Output:-
+biggest number= 20
+
+---------------------------
+6) 
+static void prime_N(int N)
+	 {       // Declaring the variables
+	        int x, y, flg;     N=150;
+	        // Printing display message
+	        System.out.println("All the Prime numbers within 1 and " + N + " are:");
+	        // Using for loop for traversing all the numbers from 1 to N
+	        for (x = 1; x <= N; x++) {
+	 
+	            // Omit 0 and 1 as they are neither prime nor composite
+	            if (x == 1 || x == 0)
+	                continue;
+	 
+	            // Using flag variable to check if x is prime or not
+	            flg = 1;
+	 
+	            for (y = 2; y <= x / 2; ++y) {
+	            	if (x % y == 0) 
+	            	{	flg = 0;  break;             }            }
+	 
+	            // If flag is 1 then x is prime but if flag is 0 then x is not prime
+	            if (flg == 1)   System.out.print(x + " ");     }    }
+Output:-
+2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97 
+------------------------------
+
+7)
+public static void isLeapYear(int year)
+    {
+        // flag to take a non-leap year by default
+        boolean is_leap_year = false;
+ 
+        // If year is divisible by 4
+        if (year % 4 == 0) {
+          is_leap_year = true;
+            // To identify whether it is a century year or not
+            if (year % 100 == 0) {
+            // Checking if year is divisible by 400 therefore century leap year
+                if (year % 400 == 0)
+                    is_leap_year = true;
+                else
+                    is_leap_year = false;
+            }
+        }
+        // We land here when corresponding if fails If year is not divisible by 4
+        else
+            // Flag dealing-  Non leap-year
+            is_leap_year = false;
+        if (!is_leap_year)
+            System.out.println(year + " : Non Leap-year");
+        else
+            System.out.println(year + " : Leap-year");
+    }
+Output:-
+2000 : Leap-year
+2008 : Leap-year
+
+-------------------------
+Java Program to Check Armstrong Number between Two Integers
+370 = 3*3*3 + 7*7*7 + 0 
+   =  27 + 343 + 0
+   =  370
+
+----------------------------
+
+Java Program to Check Whether the Character is Vowel or Consonant
+
+// Function to find whether an input character is vowel or not
+    static void Vowel_Or_Consonant(char y)
+    {
+        if (y == 'a' || y == 'e' || y == 'i' || y == 'o' || y == 'u')
+		
+            System.out.println("It is a Vowel.");
+        else
+            System.out.println("It is a Consonant.");
+    }
+Vowel_Or_Consonant('b');
+Vowel_Or_Consonant('u');
+Vowel_Or_Consonant('E');  
+
+Output:-
+It is a Consonant.
+It is a Vowel.
+It is a Consonant.
+
+if (y == 'a' || y == 'e' || y == 'i' || y == 'o'
+                || y == 'u' || y == 'A' || y == 'E' || y == 'I'
+                || y == 'O' || y == 'U')
+------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
