@@ -2098,275 +2098,501 @@ switch (ch) {
                 System.out.println(ch + " is consonant");
         }
 
+-----------------------------
+
+Java Program to Find the Largest Among Three Numbers
+
+double n1 = -4.5, n2 = 3.9, n3 = 2.5;
+if( n1 >= n2 && n1 >= n3)
+	System.out.println(n1 + " is the largest number.");
+else if (n2 >= n1 && n2 >= n3)
+	System.out.println(n2 + " is the largest number.");
+else
+System.out.println(n3 + " is the largest number.");
+
+output:- 3.9 is the largest number
+
+method 2:-
+ double n1 = -4.5, n2 = 3.9, n3 = 5.5;
+
+        if(n1 >= n2) {
+            if(n1 >= n3)
+                System.out.println(n1 + " is the largest number.");
+            else
+                System.out.println(n3 + " is the largest number.");
+        } else {
+            if(n2 >= n3)
+                System.out.println(n2 + " is the largest number.");
+            else
+                System.out.println(n3 + " is the largest number.");
+        }
+output:-
+5.5 is the largest number.
+---------
+
+Java Program to Check Leap Year
+
+ // year to be checked
+    int year = 1900;
+    boolean leap = false;
+    // if the year is divided by 4
+    if (year % 4 == 0) {
+      // if the year is century
+      if (year % 100 == 0) {
+        // if year is divided by 400 then it is a leap year
+        if (year % 400 == 0)
+          leap = true;
+        else
+          leap = false;
+      }//100
+      // if the year is not century
+      else
+        leap = true;
+    }//4
+    else
+      leap = false;
+    if (leap)
+      System.out.println(year + " is a leap year.");
+    else
+      System.out.println(year + " is not a leap year.");
+
+output:- 1900 is not a leap year.
+
+---------------
+Java Program to Check Whether a Character is Alphabet or Not
+char c = 'a';
+   if (Character.isAlphabetic(c)) {
+      System.out.println(c + " is an alphabet.");
+    }
+    else {
+      System.out.println(c + " is not an alphabet.");
+    }
+
+
+char c = 'A';
+  String output = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
+                ? c + " is an alphabet."
+                : c + " is not an alphabet.";
+        
+        System.out.println(output);
+output:- A is an alphabet.
+
+Check if a Number is Positive or Negative using if else
+
+double number = 12.3;
+
+        // true if number is less than 0
+        if (number < 0.0)
+            System.out.println(number + " is a negative number.");
+
+        // true if number is greater than 0
+        else if ( number > 0.0)
+            System.out.println(number + " is a positive number.");
+
+        // if both test expression is evaluated to false
+        else
+            System.out.println(number + " is 0.");
+    }
+output:-
+12.3 is a positive number.
+-12.3 is a negative number.
+
+Java Program to Calculate the Sum of Natural Numbers
+  int num = 100, sum = 0;
+
+        for(int i = 1; i <= num; ++i)
+        {
+            // sum = sum + i;
+            sum += i;
+        }
+
+        System.out.println("Sum = " + sum);
+
+output:-	Sum = 5050
+
+  int num = 50, i = 1, sum = 0;
+
+        while(i <= num)
+        {
+            sum += i;
+            i++;
+        }
+
+        System.out.println("Sum = " + sum);
+
+Find Factorial of a number using for loop
+public class Factorial {
+    public static void main(String[] args) {
+        int num = 10;
+        long factorial = 1;
+        for(int i = 1; i <= num; ++i)
+        {
+            // factorial = factorial * i;
+            factorial *= i;
+        }
+        System.out.printf("Factorial of %d = %d", num, factorial);
+    }
+output:-	Factorial of 10 = 3628800
+
+Find Factorial of a number using BigInteger
+ int num = 30;
+BigInteger factorial = BigInteger.ONE;
+for(int i = 1; i <= num; ++i)
+{
+	// factorial = factorial * i;
+	factorial = factorial.multiply(BigInteger.valueOf(i));
+}
+System.out.printf("Factorial of %d = %d", num, factorial);
+
+output:-	Factorial of 30 = 265252859812191058636308480000000
+
+Find Factorial of a number using while loop
+public class Factorial {
+
+    public static void main(String[] args) {
+
+        int num = 5, i = 1;
+        long factorial = 1;
+        while(i <= num)
+        {
+            factorial *= i;
+            i++;
+        }
+        System.out.printf("Factorial of %d = %d", num, factorial);	}	}
+
+output	Factorial of 5 = 120
+
+
+Java Program to Generate Multiplication Table
+In this program, you'll learn to generate multiplication table of a given number. This is done by using a for and a while loop in Java.
+
+To understand this example, you should have the knowledge of the following Java programming topics:
+
+Java for Loop
+Java while and do...while Loop
+Example 1: Generate Multiplication Table using for loop
+public class MultiplicationTable {
+    public static void main(String[] args) {
+        int num = 5;
+        for(int i = 1; i <= 10; ++i)
+        {      System.out.printf("%d * %d = %d \n", num, i, num * i);	}	    }
+
+
+Generate Multiplication Table using while loop
+public class MultiplicationTable {
+    public static void main(String[] args) {
+        int num = 9, i = 1;
+        while(i <= 10)
+        {
+            System.out.printf("%d * %d = %d \n", num, i, num * i);
+            i++;
+        }
+
+
+Java Program to Display Fibonacci Series
+method-1
+
+ int n = 10, firstTerm = 0, secondTerm = 1;
+    System.out.println("Fibonacci Series till " + n + " terms:");
+    for (int i = 1; i <= n; ++i) {
+      System.out.print(firstTerm + ", ");
+
+      // compute the next term
+      int nextTerm = firstTerm + secondTerm;
+      firstTerm = secondTerm;
+      secondTerm = nextTerm;
+    }
+
+method-2
+ int i = 1, n = 10, firstTerm = 0, secondTerm = 1;
+    System.out.println("Fibonacci Series till " + n + " terms:");
+while (i <= n) {
+      System.out.print(firstTerm + ", ");
+
+      int nextTerm = firstTerm + secondTerm;
+      firstTerm = secondTerm;
+      secondTerm = nextTerm;
+
+      i++;
+    }
+
+method-3
+
+ int n = 100, firstTerm = 0, secondTerm = 1;
+    System.out.println("Fibonacci Series Upto " + n + ": ");
+    while (firstTerm <= n) {
+      System.out.print(firstTerm + ", ");
+      int nextTerm = firstTerm + secondTerm;
+      firstTerm = secondTerm;
+      secondTerm = nextTerm;	}
+
+Java Program to Find GCD of two Numbers
+
+The HCF or GCD of two integers is the largest integer that can exactly divide both numbers (without a remainder).
+
+// find GCD between n1 and n2
+    int n1 = 81, n2 = 153;
+    
+    // initially set to gcd
+    int gcd = 1;
+    for (int i = 1; i <= n1 && i <= n2; ++i) {
+      // check if i perfectly divides both n1 and n2
+      if (n1 % i == 0 && n2 % i == 0)
+        gcd = i;    }
+    System.out.println("GCD of " + n1 +" and " + n2 + " is " + gcd);
+
+output
+GCD of 81 and 153 is 9
+
+
+ int n1 = 72, n2 = 120, lcm;
+    // maximum number between n1 and n2 is stored in lcm
+    lcm = (n1 > n2) ? n1 : n2;
+    // Always true
+    while(true) {
+      if( lcm % n1 == 0 && lcm % n2 == 0 ) {
+        System.out.printf("The LCM of %d and %d is %d.", n1, n2, lcm);
+        break;      }
+      ++lcm;    }
+output The LCM of 72 and 120 is 360.
+
+Java Program to Display Alphabets (A to Z) using loop
+
+Display uppercased alphabet using for loop
+	char c;
+    for(c = 'A'; c <= 'Z'; ++c)
+      System.out.print(c + " ");
+
+output:-	A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
+
+
+Display lowercase alphabet using for loop
+
+	char c;
+    for(c = 'a'; c <= 'z'; ++c)
+      System.out.print(c + " ");
+    
+output:- a b c d e f g h i j k l m n o p q r s t u v w x y z 
+
+Java Program to Count Number of Digits in an Integer
+
+ int count = 0, num = 0003452;
+    while (num != 0) {
+      // num = num/10
+      num /= 10;
+      ++count;    }
+    System.out.println("Number of digits: " + count);
+
+output:-	Number of digits: 4
+
+Java Program to Reverse a Number
+int num = 1234, reversed = 0;
+    
+    System.out.println("Original Number: " + num);
+    // run loop until num becomes 0
+    while(num != 0) {
+      // get last digit from num
+      int digit = num % 10;
+      reversed = reversed * 10 + digit;
+     // remove the last digit from num
+      num /= 10;
+    }
+    System.out.println("Reversed Number: " + reversed);
+
+output:-	Reversed Number: 4321
+
+Java Program to Check Palindrome
+
+ String str = "Radar", reverseStr = "";
+    int strLength = str.length();
+    for (int i = (strLength - 1); i >=0; --i) {
+      reverseStr = reverseStr + str.charAt(i);    }
+    if (str.toLowerCase().equals(reverseStr.toLowerCase())) {
+      System.out.println(str + " is a Palindrome String.");    }
+    else {  System.out.println(str + " is not a Palindrome String.");    }
+
+output:-	Radar is a Palindrome String.
+
+ int num = 3553, reversedNum = 0, remainder;
+    int originalNum = num;
+    while (num != 0) {
+      remainder = num % 10;
+      reversedNum = reversedNum * 10 + remainder;
+      num /= 10;    }
+    if (originalNum == reversedNum) {
+      System.out.println(originalNum + " is Palindrome.");    }
+    else {      System.out.println(originalNum + " is not Palindrome.");    }
+
+output:- 	3553 is Palindrome.
+
+Java Program to Check Whether a Number is Prime or Not
+ int num = 29;
+    boolean flag = false;
+    for (int i = 2; i <= num / 2; ++i) {
+      // condition for nonprime number
+      if (num % i == 0) {
+        flag = true;
+        break;	}	 }
+    if (!flag)
+      System.out.println(num + " is a prime number.");
+    else{	System.out.println(num + " is not a prime number.");  }
+
+method-2
+ int num = 33, i = 2;
+    boolean flag = false;
+    while (i <= num / 2) {
+      // condition for nonprime number
+      if (num % i == 0) {
+        flag = true;	break;	}
+      ++i;	    }
+if (!flag)
+      System.out.println(num + " is a prime number.");
+    else{	System.out.println(num + " is not a prime number.");  }
+
+output:-	33 is not a prime number.
+
+Java Program to Display Prime Numbers Between Two Intervals
+
+ int low = 20, high = 50;
+
+        while (low < high) {
+            boolean flag = false;
+            for(int i = 2; i <= low/2; ++i) {
+                // condition for nonprime number
+                if(low % i == 0) {
+                    flag = true;
+                    break;   }	  }
+            if (!flag && low != 0 && low != 1)
+                System.out.print(low + " ");
+            ++low;	  }
+output:-	23 29 31 37 41 43 47 
+
+Java Program to Calculate Average Using Arrays
+
+ double[] numArray = { 45.3, 67.5, -45.6, 20.34, 33.0, 45.6 };
+        double sum = 0.0;
+        for (double num: numArray) {    sum += num;     }
+        double average = sum / numArray.length;
+        System.out.format("The average is: %.2f", average);
+output:-	The average is: 27.69
+
+Java Program to Find Largest Element of an Array
+
+double[] numArray = { 23.4, -34.5, 50.0, 33.5, 55.5, 43.7, 5.7, -66.5 };
+        double largest = numArray[0];
+        for (double num: numArray) {
+            if(largest < num)	largest = num;	        }
+        System.out.format("Largest element = %.2f", largest);
+
+output:-	Largest element = 55.50
+
+Java Program to Print an Array
+
+int[] array = {1, 2, 3, 4, 5};
+for (int element: array) {	System.out.println(element);}
+ System.out.println(Arrays.toString(array));
+
+ int[][] array = {{1, 2}, {3, 4}, {5, 6, 7}};
+ System.out.println(Arrays.deepToString(array));
+output:-	[[1, 2], [3, 4], [5, 6, 7]]
+
+Java Program to Convert String to Date
+
+ // Format y-M-d or yyyy-MM-d
+        String string = "2017-07-25";
+        LocalDate date = LocalDate.parse(string, DateTimeFormatter.ISO_DATE);
+        System.out.println(date);
+output:-	2017-07-25
+
+		String string = "July 25, 2017";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH);
+        LocalDate date = LocalDate.parse(string, formatter);
+        System.out.println(date);
+output:-	2017-07-25
+
+Java Program to Compare Strings
+
+ String style = "Bold";
+        String style2 = "Bold";
+
+        if(style == style2)
+            System.out.println("Equal");
+        else
+            System.out.println("Not Equal");
+			
+output:-	Equal
+
+String style = new String("Bold");
+        String style2 = new String("Bold");
+
+        if(style.equals(style2))
+            System.out.println("Equal");
+        else
+            System.out.println("Not Equal");
+
+output:-	Equal
+
+ String style = new String("Bold");
+        String style2 = new String("Bold");
+
+        if(style == style2)
+            System.out.println("Equal");
+        else
+            System.out.println("Not Equal");
+
+output:-	Not Equal
+
+Java Program to Clear the StringBuffer
+	StringBuffer str = new StringBuffer();
+    str.append("Java");
+    str.append(" is");
+    str.append(" popular.");
+    System.out.println("StringBuffer: " + str);
+    str.delete(0, str.length());
+    System.out.println("Updated StringBuffer: " + str);
+output:-
+StringBuffer: Java is popular.
+Updated StringBuffer: 
+
+Java Program to Implement switch statement on strings
+
+String language = "Java";
+
+    switch(language) {
+
+      case "Java":
+        System.out.println(language + " is famous for enterprise applications.");
+        break;
+
+      case "JavaScript":
+        System.out.println(language + " is famous for frontend and backend.");
+        break;
+
+      case "Python":
+        System.out.println(language + " is famous for ML and AI.");
+        break;
+
+      default:
+        System.out.println(language + " not found on record.");
+        break;
+    }
+output
+Java is famous for enterprise applications.
+
+Java Program to Check if a string contains a substring
+String txt = "This is Programiz";
+	    String str1 = "Programiz";
+	    String str2 = "Programming";
+	    boolean result = txt.contains(str1);
+	    if(result) {System.out.println(str1 + " is present in the string.");  }
+	    else {  System.out.println(str1 + " is not present in the string.");  }
+	    result = txt.contains(str2);
+	    if(result) { System.out.println(str2 + " is present in the string.");  }
+	    else { System.out.println(str2 + " is not present in the string.");    }
+output:-
+Programiz is present in the string.
+Programming is not present in the string.
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
