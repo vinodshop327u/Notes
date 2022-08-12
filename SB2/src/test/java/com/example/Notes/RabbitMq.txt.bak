@@ -1,0 +1,260 @@
+@Configuration
+public class RabbitMQFanoutConfig {
+
+	@Bean
+	Queue marketingQueue() {return new Queue("marketingQueue", false);	}
+
+	@Bean
+	Queue financeQueue() {	return new Queue("financeQueue", false);	}
+
+	@Bean
+	Queue adminQueue() {	return new Queue("adminQueue", false);	}
+
+	@Bean
+	FanoutExchange exchange() {	return new FanoutExchange("fanout-exchange");	}
+
+	@Bean
+	Binding marketingBinding(Queue marketingQueue, FanoutExchange exchange) {
+		return BindingBuilder.bind(marketingQueue).to(exchange);	}
+
+	@Bean
+	Binding financeBinding(Queue financeQueue, FanoutExchange exchange) {
+		return BindingBuilder.bind(financeQueue).to(exchange);	}
+
+	@Bean
+	Binding adminBinding(Queue adminQueue, FanoutExchange exchange) {
+		return BindingBuilder.bind(adminQueue).to(exchange);	}
+
+Create the RabbitMQFanoutWebController class where we expose API to send message to RabbitMQ Exchange.
+
+@RestController
+@RequestMapping(value = "/javainuse-rabbitmq/fanout/")
+public class RabbitMQFanoutWebController {
+	@Autowired
+	private AmqpTemplate amqpTemplate;
+
+	@GetMapping(value = "/producer")
+	public String producer(@RequestParam("exchangeName") String exchange,
+			@RequestParam("messageData") String messageData) {
+		amqpTemplate.convertAndSend(exchange, "", messageData);
+	return "Message sent to the RabbitMQ Fanout Exchange Successfully";	}
+
+Run the Spring Boot Application
+We send the message using the url - http://localhost:8080/javainuse-rabbitmq/fanout/producer?exchangeName=fanout-exchange&messageData=HelloWorldJavaInUse
+exchange name= "fanout-exchange"
+message to sent to queue = "HelloWorldJavaInUse"
+We do not need to specify the routing key here as message is published to all the queues. The message is sent to the admin queue.We get the web output as-
+
+diagram
+
+We can see that queues named marketingQueue, adminQueue and financeQueue are created. Also message has been sent to the adminQueue.
+
+diagram
+
+An exchange named fanout-exchange is created with following bindings
+
+
+Topic Exchange
+Here again the routing key is made use of. But unlike in direct exchange type, here the routing key of the exchange and the bound queues should not necessarily be an exact match. Using regular expressions like wildcard we can send the exchange to multiple bound queues.
+
+diagram
+
+Modify the RabbitMQTopicConfig as follows-
+Create Queues named - marketingQueue, adminQueue, financeQueue and allQueue
+Create a TopicExchange named - topic-exchange
+Create Bindings for each of the queue with the TopicExchange. We specify routing key for each binding. Also for allQueue binding we specify the binding key with wildcard.
+
+@Configuration
+public class RabbitMQTopicConfig {
+
+	@Bean
+	Queue marketingQueue() {
+		return new Queue("marketingQueue", false);
+	}
+
+	@Bean
+	Queue financeQueue() {
+		return new Queue("financeQueue", false);
+	}
+
+	@Bean
+	Queue adminQueue() {
+		return new Queue("adminQueue", false);
+	}
+
+	@Bean
+	Queue allQueue() {
+		return new Queue("allQueue", false);
+	}
+
+	@Bean
+	TopicExchange topicExchange() {
+		return new TopicExchange("topic-exchange");
+	}
+	
+	@Bean
+	Binding marketingBinding(Queue marketingQueue, TopicExchange topicExchange) {
+		return BindingBuilder.bind(marketingQueue).to(topicExchange).with("queue.marketing");
+	}
+	
+	@Bean
+	Binding financeBinding(Queue financeQueue, TopicExchange topicExchange) {
+		return BindingBuilder.bind(financeQueue).to(topicExchange).with("queue.finance");
+	}
+	
+	@Bean
+	Binding adminBinding(Queue adminQueue, TopicExchange topicExchange) {
+		return BindingBuilder.bind(adminQueue).to(topicExchange).with("queue.admin");
+	}
+	
+	@Bean
+	Binding allBinding(Queue allQueue, TopicExchange topicExchange) {
+		return BindingBuilder.bind(allQueue).to(topicExchange).with("queue.*");
+	}
+
+Create the RabbitMQTopicWebController class where we expose API to send message to RabbitMQ Exchange.
+
+@RestController
+@RequestMapping(value = "/javainuse-rabbitmq/topic/")
+public class RabbitMQTopicWebController {
+
+	@Autowired
+	private AmqpTemplate amqpTemplate;
+
+	@GetMapping(value = "/producer")
+	public String producer(@RequestParam("exchangeName") String exchange, @RequestParam("routingKey") String routingKey,
+			@RequestParam("messageData") String messageData) {
+
+		amqpTemplate.convertAndSend(exchange, routingKey, messageData);
+
+		return "Message sent to the RabbitMQ Topic Exchange Successfully";
+	}
+	
+
+Run the Spring Boot Application
+We send the message using the url - http://localhost:8080//javainuse-rabbitmq/topic/producer?exchangeName=topic-exchange&routingKey=queue.admin&messageData=HelloWorldJavaInUse
+exchange name= "topic-exchange"
+routing key ="queue.admin"
+message to be sent to queue = "HelloWorldJavaInUse"
+The message is sent to the admin queue.We get the web output as-
+
+We can see that queues named marketingQueue, adminQueue and financeQueue and allQueue are created.
+RabbitMQ Topic Exchange Queues
+
+An exchange named topic-exchange is created with following bindings.
+RabbitMQ topic Exchange Binding
+Header Exchange
+In this type of exchange the routing queue is selected based on the criteria specified in the headers instead of the routing key. This is similar to topic exchange type, but here we can specify complex criteria for selecting routing queues.
+
+	
+Modify the RabbitMQHeaderConfig as follows-
+Create Queues named - marketingQueue, adminQueue, financeQueue
+Create a HeaderExchange named - header-exchange
+Create Bindings for each of the queue with the HeaderExchange. As this is a Header Exchange, instead of binding key we specify the criteria rules which should be present in the message header.
+
+
+@Configuration
+public class RabbitMQHeaderConfig {
+
+	@Bean
+	Queue marketingQueue() {
+		return new Queue("marketingQueue", false);
+	}
+
+	@Bean
+	Queue financeQueue() {
+		return new Queue("financeQueue", false);
+	}
+
+	@Bean
+	Queue adminQueue() {
+		return new Queue("adminQueue", false);
+	}
+
+	@Bean
+	HeadersExchange headerExchange() {
+		return new HeadersExchange("header-exchange");
+	}
+
+	@Bean
+	Binding marketingBinding(Queue marketingQueue, HeadersExchange headerExchange) {
+		return BindingBuilder.bind(marketingQueue).to(headerExchange).where("department").matches("marketing");
+	}
+
+	@Bean
+	Binding financeBinding(Queue financeQueue, HeadersExchange headerExchange) {
+		return BindingBuilder.bind(financeQueue).to(headerExchange).where("department").matches("finance");
+	}
+
+	@Bean
+	Binding adminBinding(Queue adminQueue, HeadersExchange headerExchange) {
+		return BindingBuilder.bind(adminQueue).to(headerExchange).where("department").matches("admin");
+	}
+
+
+Create the RabbitMQHeaderWebController class where we expose API to send message to RabbitMQ Exchange.
+
+@RestController
+@RequestMapping(value = "/javainuse-rabbitmq/header/")
+public class RabbitMQHeaderWebController {
+
+	@Autowired
+	private AmqpTemplate amqpTemplate;
+
+	@GetMapping(value = "/producer")
+	public String producer(@RequestParam("exchangeName") String exchange, @RequestParam("department") String department,
+			@RequestParam("messageData") String messageData) {
+
+		MessageProperties messageProperties = new MessageProperties();
+		messageProperties.setHeader("department", department);
+		MessageConverter messageConverter = new SimpleMessageConverter();
+		Message message = messageConverter.toMessage(messageData, messageProperties);
+		amqpTemplate.send(exchange, "", message);
+
+		return "Message sent to the RabbitMQ Header Exchange Successfully";
+	}
+
+Run the Spring Boot Application
+We send the message using the url - http://localhost:8080/javainuse-rabbitmq/header/producer?exchangeName=header-exchange&department=admin&messageData=HelloWorldJavaInUse
+exchange name= "header-exchange"
+header key ="admin"
+message to be sent to queue = "HelloWorldJavaInUse"
+The message is sent to the admin queue.We get the web output as-
+RabbitMQ Heaader Exchange Output
+We can see that queues named marketingQueue, adminQueue and financeQueue are created. Also adminQueue has a message.
+
+An exchange named header-exchange is created with following bindings.
+
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
