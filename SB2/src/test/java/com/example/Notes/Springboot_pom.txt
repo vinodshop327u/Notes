@@ -39,12 +39,19 @@ example:-
 private static final Logger logger = LoggerFactory.getLogger(RabbitMQConsumer.class);
 logger.info("Recieved Message From RabbitMQ: " + employee);
 
----------------
-
-
+------------------------------
 
 vinod327u@outlook.com
 Jasvin@123
+
+
+9948228615
+srinu       
+
+8309939164
+vardini
+
+
 
 
 
