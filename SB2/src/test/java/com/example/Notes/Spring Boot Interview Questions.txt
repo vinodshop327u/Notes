@@ -2105,18 +2105,59 @@ Parent
 web
 Thymeleaf
 Freemarker
+-----------
+RestController 
+Controller
+ResponseBody
+RequestMapping 
+ResponseEntity
+Autowired
+
+--------------------
+how to connect 2 data base using SB?
+how to use 2 properties file using SB?
+
+
+----------
+
+What is Spring Boot?
+Features of Spring Boot that make it different?
+Why Spring Boot over Spring?
+What are the advantages of Spring Boot?
+How to create Spring Boot application using Maven?	
+What are the Spring Boot Annotations?
+What are the Spring Boot Starters?
+What is Spring Boot Actuator?
+What is thymeleaf?
+How to use thymeleaf?
+Spring Vs Spring Boot?
+What is dependency injection in spring boot?
 
 
 
 
+----------------------------------
+What is Spring Boot?
 
 
 
+What are the features of Spring Boot?
+Web Development
+SpringApplication
+Application events and listeners
+Admin features
 
+What are the Spring Boot Annotations?
+The @RestController is a stereotype annotation. It adds @Controller and @ResponseBody annotations to the class. We need to import org.springframework.web.bind.annotation package in our file, in order to implement it.
 
+Mention the advantages of Spring Boot.
+Advantages of Spring Boot –
 
-
-
+It allows convention over configuration hence you can fully avoid XML configuration.
+SpringBoot reduces lots of development time and helps to increase productivity.
+Helps to reduce a lot of boilerplate code in your application.
+It comes with embedded HTTP servers like tomcat, Jetty, etc to develop and test your applications.
+It also provides CLI (Command Line Interface) tool which helps you  to develop and test your application from CMD.
 
 
 
