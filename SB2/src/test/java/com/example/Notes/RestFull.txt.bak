@@ -1,0 +1,14 @@
+
+Social Media Application 
+
+Get/users
+Get/user/1
+Put/
+Post/users
+Delete/user/1
+
+Retrieve all post for a user/ GET  /users/{id}/post
+Create a posts for a user -   POST /user/{id}/post
+Retrieve details of a post    GET /user/{id}posts/{post-id}  
+
+
