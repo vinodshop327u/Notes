@@ -1,0 +1,128 @@
+
+-----------
+RestController 
+Controller
+ResponseBody
+RequestMapping 
+ResponseEntity
+Autowired
+EnableAutoConfiguration 
+RepositoryRestResource
+@Query
+RequestBody 
+PathVariable
+Pathparam
+ResponseStatus 
+Required
+@configuartion.
+@Componentscan
+@Bean
+@component.
+@service.
+@Repository
+@EnableAutoConfiguaration
+@SpringBootApplication.
+@GetMapping
+@PostMapping.
+@PutMapping
+@DeleteMapping
+@JsonComponent
+
+
+
+
+
+--------------------
+how to connect 2 data base using SB?
+how to use 2 properties file using SB?
+
+
+----------
+
+What is Spring Boot?
+Features of Spring Boot that make it different?
+Why Spring Boot over Spring?
+What are the advantages of Spring Boot?
+How to create Spring Boot application using Maven?	
+What are the Spring Boot Annotations?
+What are the Spring Boot Starters?
+What is Spring Boot Actuator?
+What is thymeleaf?
+How to use thymeleaf?
+Spring Vs Spring Boot?
+What is dependency injection in spring boot?
+What is spring Boot dependency Management?
+
+
+
+----------------------------------
+What is Spring Boot?
+Spring Boot Microservices Interview Questions
+
+
+
+
+
+What are the features of Spring Boot?
+Web Development
+SpringApplication
+Application events and listeners
+Admin features
+
+What are the Spring Boot Annotations?
+The @RestController is a stereotype annotation. It adds @Controller and @ResponseBody annotations to the class. We need to import org.springframework.web.bind.annotation package in our file, in order to implement it.
+
+Mention the advantages of Spring Boot.
+Advantages of Spring Boot –
+
+It allows convention over configuration hence you can fully avoid XML configuration.
+SpringBoot reduces lots of development time and helps to increase productivity.
+Helps to reduce a lot of boilerplate code in your application.
+It comes with embedded HTTP servers like tomcat, Jetty, etc to develop and test your applications.
+It also provides CLI (Command Line Interface) tool which helps you  to develop and test your application from CMD.
+
+What are the basic Annotations that spring boot offers?
+First of all, we have to know about the annotations. Annotations are used to instruct the intention of the programmers.
+
+As the name suggests, spring boot annotations is a form of Metadata that provides the whole data about the program. In other ways, we can define it as annotations are used to provide supplemental information about the program. It is not part of the program.
+
+It does not change the programs which are already compiled.
+
+Core Spring Framework Annotation:-
+@Required:-
+@Required applies to the bean setter method.
+This indicates that the annotated bean must be populated at the configuration time with the required property; if the following case is not satisfied, it throws an exception BeanInitializationException.
+
+@Autowired:-
+ In the spring framework, spring provides annotation-based auto–wiring by providing @Autowired annotation.
+
+It is used to auto-wire spring bean on setter methods, instance variables and constructors., When we use the annotation @Autowired, the spring container auto-wires the bean factory by matching the data type.
+
+ Other Annotations which are provided by Spring Boot, Spring Framework, and In Spring MVC are:-
+
+Explain @Restcontroller annotation in spring boot?
+Spring restcontroller annotation is an annotation that is itself annotated within two annotations.
+
+@Restcontroller is annotated within @controller and @Responsebody. This annotation is applied to mark the respective class as a request handler in your application.
+
+Spring Rest controller annotation is used to create restful web services using Spring MVC. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
