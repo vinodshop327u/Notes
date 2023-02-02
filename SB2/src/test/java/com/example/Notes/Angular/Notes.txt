@@ -1,0 +1,21 @@
+Step-1
+	Install node js ,  VSCode software and Typescript
+Step-2
+	open angular project folder install angular cli
+command : npm install -g @angular/cli
+
+Step-3: vscode some extenction install
+	1.
+	2.
+	3.
+	4.
+
+
+
+
+
+
+
+
+
+
