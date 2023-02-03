@@ -1,0 +1,50 @@
+1----------------
+Html
+<button
+  type="button"
+  [disabled]="canClick"
+  (click)="sayMessage()">
+  Trigger alert message
+</button>
+
+Component
+
+ message = 'Hello, World 143';
+ canClick = false;
+sayMessage() {
+    alert(this.message);
+  }
+2-----------
+html:
+<p
+  [id]="sayHelloId"
+  [style.color]="fontColor">
+  You can set my color in the component!
+</p>
+
+<p>My color is {{ fontColor }} "fontColor"</p>
+
+component:
+ fontColor = 'red';
+  sayHelloId = 1;
+  
+3-------------------
+html:
+<button type="button" (click)="onLogMe()">Log me!</button>
+component:
+
+export class HelloWorldDependencyInjectionComponent  {
+  count = 0;
+
+  constructor(private logger: Logger) { }
+
+  onLogMe() {
+    this.logger.writeCount(this.count);
+    this.count++;
+    alert(this.count)
+  }
+}
+4-------------
+
+
+
